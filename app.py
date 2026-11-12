@@ -60,14 +60,13 @@ if prompt := st.chat_input("Digite sua dúvida aqui..."):
     ---
     """
 
-   try:
+    try:
         model = genai.GenerativeModel("models/gemini-3.8-flash")
         
         with st.chat_message("assistant"):
             with st.spinner("Analisando o edital oficial..."):
                 prompt_completo = f"{system_instruction}\n\nPERGUNTA DO CANDIDATO: {prompt}"
                 
-                # Adicionado request_options com timeout para evitar travamento infinito
                 response = model.generate_content(
                     prompt_completo,
                     request_options={"timeout": 30}
