@@ -4,7 +4,7 @@ from google import genai
 # Configuração visual da página
 st.set_page_config(
     page_title="JanAIna - Assistente FAP",
-    page_icon="🤖",
+    page_icon="👩‍🦰",
     layout="centered"
 )
 
@@ -38,7 +38,7 @@ if "messages" not in st.session_state:
 
 # 4. Renderizar o histórico de mensagens com avatares personalizados
 for message in st.session_state.messages:
-    icone = "🤖" if message["role"] == "assistant" else "🧑‍🎓"
+    icone = "👩‍🦰" if message["role"] == "assistant" else "🧑‍🎓"
     with st.chat_message(message["role"], avatar=icone):
         st.markdown(message["content"])
 
@@ -63,7 +63,7 @@ if prompt := st.chat_input("Digite sua dúvida aqui..."):
     """
 
     try:
-        with st.chat_message("assistant", avatar="🎓"):
+        with st.chat_message("assistant", avatar="👩‍🦰"):
             with st.spinner("Analisando o edital oficial..."):
                 prompt_completo = f"{system_instruction}\n\nPERGUNTA DO CANDIDATO: {prompt}"
                 
@@ -95,6 +95,6 @@ if prompt := st.chat_input("Digite sua dúvida aqui..."):
         else:
             error_msg = f"Ocorreu um erro técnico: {e}"
             
-        with st.chat_message("assistant", avatar="🎓"):
+        with st.chat_message("assistant", avatar="👩‍🦰"):
             st.error(error_msg)
         st.session_state.messages.append({"role": "assistant", "content": error_msg})
