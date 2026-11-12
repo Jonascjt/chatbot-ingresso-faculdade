@@ -60,15 +60,18 @@ if prompt := st.chat_input("Digite sua dúvida aqui..."):
     ---
     """
 
-    try:
-        # Usando o modelo atualizado e compatível
+   try:
         model = genai.GenerativeModel("models/gemini-3.8-flash")
         
         with st.chat_message("assistant"):
             with st.spinner("Analisando o edital oficial..."):
-                # Enviando a instrução do sistema (RAG) junto com a pergunta do usuário
                 prompt_completo = f"{system_instruction}\n\nPERGUNTA DO CANDIDATO: {prompt}"
-                response = model.generate_content(prompt_completo)
+                
+                # Adicionado request_options com timeout para evitar travamento infinito
+                response = model.generate_content(
+                    prompt_completo,
+                    request_options={"timeout": 30}
+                )
                 resposta_texto = response.text
                 st.markdown(resposta_texto)
                 
@@ -76,7 +79,7 @@ if prompt := st.chat_input("Digite sua dúvida aqui..."):
         st.session_state.messages.append({"role": "assistant", "content": resposta_texto})
         
     except Exception as e:
-        error_msg = f"Ocorreu um erro ao processar sua solicitação: {e}"
+        error_msg = f"Ocorreu um erro ou tempo esgotado ao processar: {e}"
         with st.chat_message("assistant"):
             st.error(error_msg)
         st.session_state.messages.append({"role": "assistant", "content": error_msg})
