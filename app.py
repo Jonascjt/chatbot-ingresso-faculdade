@@ -47,7 +47,7 @@ if prompt := st.chat_input("Digite sua dúvida aqui..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="🧑‍🎓"):
         st.markdown(prompt)
-        
+
 # Exibir botões de sugestão apenas no início da conversa
 if len(st.session_state.messages) == 1:
     st.markdown("**Sobre qual assunto você gostaria de falar?**")
@@ -92,7 +92,7 @@ if len(st.session_state.messages) == 1:
                 for tentativa in range(3):
                     try:
                         response = client.models.generate_content(
-                            model="gemini-3.8-flash",
+                            model="gemini-3.8-flash-lite",
                             contents=prompt_completo,
                         )
                         break
