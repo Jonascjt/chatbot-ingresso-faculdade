@@ -8,7 +8,7 @@ st.set_page_config(
     layout="centered"
 )
 
-st.title(" JanAIna - Assistente de Ingresso FAP")
+st.title("Jan:blue[AI]na - Assistente de Ingresso FAP")
 st.caption("Assistente virtual inteligente alimentado pelas diretrizes e editais oficiais.")
 
 # Título com o "AI" em destaque colorido
@@ -20,7 +20,6 @@ st.markdown(
     </h1>
     """, 
     unsafe_allow_html=True
-    st.caption("Assistente virtual inteligente alimentado pelas diretrizes e editais oficiais.")
 )
 
 # 1. Configurar o Cliente da API (obtida dos Secrets do Streamlit Cloud)
