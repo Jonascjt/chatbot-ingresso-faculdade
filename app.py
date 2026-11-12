@@ -61,10 +61,7 @@ if prompt := st.chat_input("Digite sua dúvida aqui..."):
     """
 
     try:
-        model = genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
-            system_instruction=system_instruction
-        )
+        model = genai.GenerativeModel(models/gemini-1.5-flash)
         
         with st.chat_message("assistant"):
             with st.spinner("Analisando o edital oficial..."):
