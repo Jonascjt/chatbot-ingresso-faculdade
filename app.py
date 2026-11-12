@@ -8,7 +8,7 @@ st.set_page_config(
     layout="centered"
 )
 
-st.title("🤖 JanAIna - Assistente de Ingresso FAP")
+st.title(" JanAIna - Assistente de Ingresso FAP")
 st.caption("Assistente virtual inteligente alimentado pelas diretrizes e editais oficiais.")
 
 # 1. Configurar o Cliente da API (obtida dos Secrets do Streamlit Cloud)
@@ -62,14 +62,26 @@ if prompt := st.chat_input("Digite sua dúvida aqui..."):
     """
 
     try:
-        with st.chat_message("assistant", avatar="🤖"):
+        with st.chat_message("assistant", avatar="🎓"):
             with st.spinner("Analisando o edital oficial..."):
                 prompt_completo = f"{system_instruction}\n\nPERGUNTA DO CANDIDATO: {prompt}"
                 
-                response = client.models.generate_content(
-                    model="gemini-3.8-flash",
-                    contents=prompt_completo,
-                )
+                # Tentativa de chamada com tratamento para pico de demanda (503)
+                import time
+                response = None
+                for tentativa in range(3):
+                    try:
+                        response = client.models.generate_content(
+                            model="gemini-3.8-flash",
+                            contents=prompt_completo,
+                        )
+                        break
+                    except Exception as api_err:
+                        if "503" in str(api_err) and tentativa < 2:
+                            time.sleep(2) # Aguarda 2 segundos antes de tentar de novo
+                            continue
+                        raise api_err
+
                 resposta_texto = response.text
                 st.markdown(resposta_texto)
                 
@@ -77,7 +89,11 @@ if prompt := st.chat_input("Digite sua dúvida aqui..."):
         st.session_state.messages.append({"role": "assistant", "content": resposta_texto})
         
     except Exception as e:
-        error_msg = f"Ocorreu um erro técnico: {e}"
-        with st.chat_message("assistant", avatar="🤖"):
+        if "503" in str(e) or "UNAVAILABLE" in str(e):
+            error_msg = "⚠️ Os servidores do Gemini estão com alta demanda no momento. Por favor, aguarde alguns segundos e envie sua pergunta novamente."
+        else:
+            error_msg = f"Ocorreu um erro técnico: {e}"
+            
+        with st.chat_message("assistant", avatar="🎓"):
             st.error(error_msg)
         st.session_state.messages.append({"role": "assistant", "content": error_msg})
