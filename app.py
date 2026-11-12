@@ -61,11 +61,14 @@ if prompt := st.chat_input("Digite sua dúvida aqui..."):
     """
 
     try:
-        model = genai.GenerativeModel("models/gemini-1.5-flash")
+        # Usando o modelo atualizado e compatível
+        model = genai.GenerativeModel("gemini-2.5-flash")
         
         with st.chat_message("assistant"):
             with st.spinner("Analisando o edital oficial..."):
-                response = model.generate_content(prompt)
+                # Enviando a instrução do sistema (RAG) junto com a pergunta do usuário
+                prompt_completo = f"{system_instruction}\n\nPERGUNTA DO CANDIDATO: {prompt}"
+                response = model.generate_content(prompt_completo)
                 resposta_texto = response.text
                 st.markdown(resposta_texto)
                 
