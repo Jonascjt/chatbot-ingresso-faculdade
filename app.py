@@ -1,5 +1,5 @@
 import streamlit as st
-import google.generativeai as genai
+from google import genai
 
 # Configuração visual da página
 st.set_page_config(
@@ -11,9 +11,10 @@ st.set_page_config(
 st.title("🎓 Tira-Dúvidas de Ingresso Universitário")
 st.caption("Assistente virtual inteligente alimentado pelas diretrizes e editais oficiais.")
 
-# 1. Configurar Chave da API com segurança (obtida dos Secrets do Streamlit Cloud)
+# 1. Configurar o Cliente da API com a nova biblioteca (obtida dos Secrets)
 try:
-    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+    api_key = st.secrets["GEMINI_API_KEY"]
+    client = genai.Client(api_key=api_key)
 except Exception as e:
     st.error("Chave da API do Gemini não configurada. Adicione a chave nos 'Secrets' do painel do Streamlit Cloud.")
     st.stop()
@@ -61,15 +62,14 @@ if prompt := st.chat_input("Digite sua dúvida aqui..."):
     """
 
     try:
-        model = genai.GenerativeModel("models/gemini-3.8-flash")
-        
         with st.chat_message("assistant"):
             with st.spinner("Analisando o edital oficial..."):
                 prompt_completo = f"{system_instruction}\n\nPERGUNTA DO CANDIDATO: {prompt}"
                 
-                response = model.generate_content(
-                    prompt_completo,
-                    request_options={"timeout": 30}
+                # Chamada utilizando o novo cliente Google GenAI
+                response = client.models.generate_content(
+                    model="gemini-3.8-flash",
+                    contents=prompt_completo,
                 )
                 resposta_texto = response.text
                 st.markdown(resposta_texto)
@@ -78,7 +78,7 @@ if prompt := st.chat_input("Digite sua dúvida aqui..."):
         st.session_state.messages.append({"role": "assistant", "content": resposta_texto})
         
     except Exception as e:
-        error_msg = f"Ocorreu um erro ou tempo esgotado ao processar: {e}"
+        error_msg = f"Ocorreu um erro ao processar: {e}"
         with st.chat_message("assistant"):
             st.error(error_msg)
         st.session_state.messages.append({"role": "assistant", "content": error_msg})
