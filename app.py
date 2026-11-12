@@ -11,6 +11,16 @@ st.set_page_config(
 st.title(" JanAIna - Assistente de Ingresso FAP")
 st.caption("Assistente virtual inteligente alimentado pelas diretrizes e editais oficiais.")
 
+# Título com o "AI" em destaque colorido
+st.markdown(
+    """
+    <h1 style='text-align: left; font-family: sans-serif;'>
+        🎓 JAN<span style='color: #20b2aa;'>AI</span>NA - Assistente FAP
+    </h1>
+    """, 
+    unsafe_allow_html=True
+)
+
 # 1. Configurar o Cliente da API (obtida dos Secrets do Streamlit Cloud)
 try:
     api_key = st.secrets["GEMINI_API_KEY"]
