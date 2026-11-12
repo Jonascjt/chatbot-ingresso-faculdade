@@ -47,26 +47,7 @@ if prompt := st.chat_input("Digite sua dúvida aqui..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="🧑‍🎓"):
         st.markdown(prompt)
-
-# Exibir botões de sugestão apenas no início da conversa
-if len(st.session_state.messages) == 1:
-    st.markdown("**Sobre qual assunto você gostaria de falar?**")
-    col1, col2 = st.columns(2)
-    sugestao = None
-    with col1:
-        if st.button("📚 Cursos e localização", use_container_width=True):
-            sugestao = "Quais cursos de graduação a FAP oferece e onde ela fica?"
-        if st.button("💰 Mensalidades e pagamentos", use_container_width=True):
-            sugestao = "Quais são as formas de pagamento das mensalidades?"
-        if st.button("🏫 Internato e vida acadêmica", use_container_width=True):
-            sugestao = "Como funciona o campus residencial (internato) da FAP?"
-    with col2:
-        if st.button("📝 Vestibular e matrículas", use_container_width=True):
-            sugestao = "Como faço para me inscrever no vestibular e quais documentos preciso?"
-        if st.button("🎓 Bolsas, PROUNI e FIES", use_container_width=True):
-            sugestao = "A FAP oferece bolsas de estudo ou participa do PROUNI e FIES?"
-        if st.button("📞 Falar com um atendente", use_container_width=True):
-            sugestao = "Quais são os contatos e horários de atendimento da FAP?"        
+       
 
     # Prompt Engineering com RAG estrito
     system_instruction = f"""
@@ -92,7 +73,7 @@ if len(st.session_state.messages) == 1:
                 for tentativa in range(3):
                     try:
                         response = client.models.generate_content(
-                            model="gemini-3.8-flash-lite",
+                            model="gemini-3.8-flash",
                             contents=prompt_completo,
                         )
                         break
