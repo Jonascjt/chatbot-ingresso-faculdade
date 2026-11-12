@@ -15,7 +15,7 @@ st.caption("Assistente virtual inteligente alimentado pelas diretrizes e editais
 st.markdown(
     """
     <h1 style='text-align: left; font-family: sans-serif;'>
-        🎓 JAN<span style='color: #20b2aa;'>AI</span>NA - Assistente FAP
+        🎓 JAN<span style='color: #1E88E5;'>AI</span>NA - Assistente FAP
     </h1>
     """, 
     unsafe_allow_html=True
