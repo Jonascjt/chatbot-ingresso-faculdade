@@ -20,6 +20,7 @@ st.markdown(
     </h1>
     """, 
     unsafe_allow_html=True
+    st.caption("Assistente virtual inteligente alimentado pelas diretrizes e editais oficiais.")
 )
 
 # 1. Configurar o Cliente da API (obtida dos Secrets do Streamlit Cloud)
